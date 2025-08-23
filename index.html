@@ -54,9 +54,9 @@
       <input type="file" id="fileInput" name="file" accept="image/*" required><br>
       <select id="modelSelect" required>
         <option value="vgg11">VGG11</option>
-        <!-- <option value="vgg13">VGG13</option>
+        <option value="vgg13">VGG13</option>
         <option value="vgg16">VGG16</option>
-        <option value="vgg19">VGG19</option> -->
+        <option value="vgg19">VGG19</option>
       </select><br>
       <button type="submit">Predict</button>
     </form>
@@ -65,8 +65,9 @@
   </div>
 
   <script>
-    const backendURL = "https://trungtruong32-dogcat-backend.hf.space/"; //  đổi thành URL backend thực tế
-
+    const backendURL = "https://trungtruong32-dogcat-backend.hf.space/"; 
+    //const backendURL = "http://127.0.0.1:7860";
+    
     // Hiển thị ảnh preview
     document.getElementById("fileInput").onchange = function(evt) {
       const [file] = this.files;

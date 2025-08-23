@@ -29,15 +29,46 @@ def load_model(config, weight_path):
     model.eval()
     return model
 
+# @app.route("/predict/<model_name>", methods=["POST"])
+# def predict(model_name):
+#     if model_name not in MODEL_CONFIGS:
+#         return jsonify({"error": "Invalid model name"}), 400
+
+#     # Lazy loading
+#     if model_name not in models:
+#         config, filename = MODEL_CONFIGS[model_name]
+#         local_path = os.path.join(os.path.dirname(__file__), filename)
+#         if not os.path.exists(local_path):
+#             return jsonify({"error": f"Model file {filename} not found"}), 500
+#         models[model_name] = load_model(config, local_path)
+
+#     model = models[model_name]
+
+#     # Nhận file ảnh từ request
+#     file = request.files["file"]
+#     tmp_path = os.path.join("/tmp", "upload.jpg")   
+#     if not os.path.exists(tmp_path):
+#         os.makedirs(tmp_path)
+#     file.save(tmp_path)
+
+#     label, confidence, _ = predict_image(tmp_path, model)
+
+#     return jsonify({
+#         "model": model_name,
+#         "prediction": label,
+#         "confidence": round(confidence, 4)
+#     })
+
+
 @app.route("/predict/<model_name>", methods=["POST"])
 def predict(model_name):
     if model_name not in MODEL_CONFIGS:
         return jsonify({"error": "Invalid model name"}), 400
 
-    # Lazy loading
+    # Lazy loading: chỉ load 1 lần
     if model_name not in models:
         config, filename = MODEL_CONFIGS[model_name]
-        local_path = os.path.join(os.path.dirname(__file__), filename)
+        local_path = os.path.join(os.path.dirname(__file__), filename)  # lấy file trong repo
         if not os.path.exists(local_path):
             return jsonify({"error": f"Model file {filename} not found"}), 500
         models[model_name] = load_model(config, local_path)
@@ -46,17 +77,16 @@ def predict(model_name):
 
     # Nhận file ảnh từ request
     file = request.files["file"]
-    tmp_path = os.path.join("/tmp", "upload.jpg")   
-    file.save(tmp_path)
+    file_path = "temp.jpg"
+    file.save(file_path)
 
-    label, confidence, _ = predict_image(tmp_path, model)
+    label, confidence, _ = predict_image(file_path, model)
 
     return jsonify({
         "model": model_name,
         "prediction": label,
         "confidence": round(confidence, 4)
     })
-
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 7860))
