@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Classifying dogs and cats with VGG">
+  <title>🐶🐱 Dog vs Cat Classifier</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: #f5f5f5;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 20px;
+      display: inline-block;
+    }
+    input, select, button {
+      margin: 10px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    img {
+      margin-top: 15px;
+      max-width: 300px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+    }
+    #result {
+      font-weight: bold;
+      margin-top: 15px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐶🐱 Dog vs Cat Classifier</h1>
+  <div class="card">
+    <form id="uploadForm">
+      <input type="file" id="fileInput" name="file" accept="image/*" required><br>
+      <select id="modelSelect" required>
+        <option value="vgg11">VGG11</option>
+        <!-- <option value="vgg13">VGG13</option>
+        <option value="vgg16">VGG16</option>
+        <option value="vgg19">VGG19</option> -->
+      </select><br>
+      <button type="submit">Predict</button>
+    </form>
+    <div id="preview"></div>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    const backendURL = "https://trungtruong32-dogcat-backend.hf.space/"; //  đổi thành URL backend thực tế
+
+    // Hiển thị ảnh preview
+    document.getElementById("fileInput").onchange = function(evt) {
+      const [file] = this.files;
+      if (file) {
+        document.getElementById("preview").innerHTML = `<img src="${URL.createObjectURL(file)}">`;
+      }
+    };
+
+    // Submit form
+    document.getElementById("uploadForm").onsubmit = async (e) => {
+      e.preventDefault();
+      const file = document.getElementById("fileInput").files[0];
+      const model = document.getElementById("modelSelect").value;
+      const formData = new FormData();
+      formData.append("file", file);
+
+      document.getElementById("result").innerText = "⏳ Đang dự đoán...";
+
+      try {
+        let response = await fetch(`${backendURL}/predict/${model}`, {
+          method: "POST",
+          body: formData
+        });
+
+        let result = await response.json();
+        if (result.error) {
+          document.getElementById("result").innerText = "❌ Error: " + result.error;
+        } else {
+          document.getElementById("result").innerText =
+            `Model: ${result.model.toUpperCase()} | Prediction: ${result.prediction} (${(result.confidence*100).toFixed(2)}%)`;
+        }
+      } catch (err) {
+        document.getElementById("result").innerText = "⚠️ Lỗi kết nối backend!";
+      }
+    };
+  </script>
+</body>
+</html>
