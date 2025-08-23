@@ -29,6 +29,7 @@ def load_model(config, weight_path):
     model.eval()
     return model
 
+##Dùng khi backend deploy trên Hugging Face Space
 # @app.route("/predict/<model_name>", methods=["POST"])
 # def predict(model_name):
 #     if model_name not in MODEL_CONFIGS:
@@ -59,7 +60,7 @@ def load_model(config, weight_path):
 #         "confidence": round(confidence, 4)
 #     })
 
-
+##Dùng chạy local
 @app.route("/predict/<model_name>", methods=["POST"])
 def predict(model_name):
     if model_name not in MODEL_CONFIGS:
@@ -68,7 +69,7 @@ def predict(model_name):
     # Lazy loading: chỉ load 1 lần
     if model_name not in models:
         config, filename = MODEL_CONFIGS[model_name]
-        local_path = os.path.join(os.path.dirname(__file__), filename)  # lấy file trong repo
+        local_path = os.path.join(os.path.dirname(__file__), filename) 
         if not os.path.exists(local_path):
             return jsonify({"error": f"Model file {filename} not found"}), 500
         models[model_name] = load_model(config, local_path)

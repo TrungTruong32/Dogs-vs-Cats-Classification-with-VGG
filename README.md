@@ -3,6 +3,7 @@
 Dự án này triển khai mô hình **VGG** để phân loại ảnh chó và mèo.  
 Mô hình được huấn luyện bằng PyTorch, có thể chạy thử trực tiếp qua file `app.py`.
 
+
 ---
 
 ## 📂 Cấu trúc thư mục
@@ -18,6 +19,7 @@ Mô hình được huấn luyện bằng PyTorch, có thể chạy thử trực 
 ## Backend 
 Backend được deploy trên **Hugging Face Space**.  
 Do giới hạn **1GB dung lượng lưu trữ** của Space, repo này chỉ demo với mô hình **VGG11** (model có accuracy cao nhất).  
+👉 [Link demo](https://trungtruong32.github.io/Dogs-vs-Cats-Classification-with-VGG/)
 
 Các mô hình khác (VGG13, VGG16, VGG19) đã được huấn luyện và lưu tại Google Drive:  
 👉 [Link Drive](https://drive.google.com/drive/folders/140VgMYWKlfni-tnGeM6yHK0DvkHTp9Lp?usp=sharing)
@@ -33,6 +35,9 @@ Các mô hình khác (VGG13, VGG16, VGG19) đã được huấn luyện và lưu
 pip install -r requirements.txt
 ```
 3. Tải file model từ link drive. Đặt file vào thư mục gốc của repo (cùng cấp với app.py).
+
+👉 [Link Drive](https://drive.google.com/drive/folders/140VgMYWKlfni-tnGeM6yHK0DvkHTp9Lp?usp=sharing)
+
 
 4. Chạy server:
 ```
